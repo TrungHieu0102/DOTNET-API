@@ -17,13 +17,13 @@ namespace api.Controllers
         public StockController(ApplicationDBContext dbContext, IStockRepository stockRepository)
         {
             _dbContext = dbContext;
-            _stockRepository= stockRepository;
+            _stockRepository = stockRepository;
         }
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
             var stock = await _stockRepository.GetAllAsync();
-            var stockDto = stock.Select(x=>x.ToStockDto());
+            var stockDto = stock.Select(x => x.ToStockDto());
             return Ok(stock);
         }
         [HttpGet("{id}")]
@@ -40,7 +40,7 @@ namespace api.Controllers
         public async Task<IActionResult> CreateStock([FromBody] CreateUpdateStockRequestDto stockDto)
         {
             var stockModel = stockDto.ToStockFromCreateDTO();
-           await _stockRepository.CreateAsync(stockModel);
+            await _stockRepository.CreateAsync(stockModel);
             return CreatedAtAction(nameof(GetById), new { id = stockModel.Id }, stockModel);
 
         }
@@ -48,25 +48,28 @@ namespace api.Controllers
         [Route("{id}")]
         public async Task<IActionResult> UpdateStock([FromRoute] int id, [FromBody] CreateUpdateStockRequestDto updateDto)
         {
-            var stockModel =await  _stockRepository.UpdateAsync(id,updateDto);
-            if(stockModel== null){
+            var stockModel = await _stockRepository.UpdateAsync(id, updateDto);
+            if (stockModel == null)
+            {
                 return NotFound();
             }
-           
+
 
             await _dbContext.SaveChangesAsync();
             return Ok(stockModel.ToStockDto());
         }
         [HttpDelete]
         [Route("{id}")]
-        public async Task<IActionResult> DeleteStock([FromRoute] int id){
-            var stockModel =await _stockRepository.DeleteAsync(id);
-            if(stockModel==null){
+        public async Task<IActionResult> DeleteStock([FromRoute] int id)
+        {
+            var stockModel = await _stockRepository.DeleteAsync(id);
+            if (stockModel == null)
+            {
                 return NotFound();
             }
-           
+
             return NoContent();
         }
-       
+
     }
 }
