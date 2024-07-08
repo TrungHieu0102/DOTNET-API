@@ -1,10 +1,5 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using api.DTOs.Comment;
-using api.Models;
-
+#nullable disable
 namespace api.Dtos.Stock
 {
     public class StockDto
