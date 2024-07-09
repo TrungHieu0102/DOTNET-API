@@ -3,12 +3,14 @@ using api.Dtos.Stock;
 using api.Helpers;
 using api.Interfaces;
 using api.Mappers;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace api.Controllers
 {
     [Route("api/stock")]
     [ApiController]
+    [Authorize]
     public class StockController : ControllerBase
     {
         private readonly ApplicationDBContext _dbContext;
@@ -26,8 +28,8 @@ namespace api.Controllers
                 return BadRequest(ModelState);
             }
             var stock = await _stockRepository.GetAllAsync(query);
-            var stockDto = stock.Select(x => x.ToStockDto());
-            return Ok(stock);
+            var stockDto = stock.Select(x => x.ToStockDto()).ToList();
+            return Ok(stockDto);
         }
         [HttpGet("{id:int}")]
         public async Task<IActionResult> GetById([FromRoute] int id)
